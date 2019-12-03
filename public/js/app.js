@@ -9,7 +9,9 @@ document.getElementById("form").addEventListener('submit', function (event) {
   getData(question);
   return false;
 });
-
+document.getElementById("form").addEventListener('reset', function (event) {
+  document.getElementById("response").textContent = "";
+});
 document.addEventListener("DOMContentLoaded", function (event) {
   document.getElementsByClassName("si-mic")[0].addEventListener("click", function (e) {
     let qbox = document.getElementById("question");
@@ -23,18 +25,23 @@ function getData(data) {
   document.getElementById("loading").classList.remove("hidden");
   data = "Q: " + data + "\n";
   fetch('/api/data', {
-    method: 'post',
-    mode: 'cors',
-    redirect: 'follow',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': "application/json; charset=UTF-8"
-    },
-    body: JSON.stringify({ "data": data })
+      method: 'post',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: {
+        'Accept': 'application/json',
+        "Content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify({
+        "context": data, 
+        "model_size":"gpt2/xl",
+        "top_p":0.9,
+        "temperature":1,
+        "max_time":1 })
   }).then(function (response) {
     return response.json();
   }).then(function (jsonData) {
-    answer = jsonData.response;
+    answer = jsonData.sentences[0].value;
     buffer = buffer + answer;
 
     //clean up some bad formatting
