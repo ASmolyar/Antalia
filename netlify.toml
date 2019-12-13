@@ -10,6 +10,6 @@
 
 [[redirects]]
   from = "/api/data"
-  to = "https://transformer.huggingface.co/autocomplete/gpt2/xl"
+  to = "https://transformer.huggingface.co/autocomplete/gpt2/large"
   status = 200
   force = true
